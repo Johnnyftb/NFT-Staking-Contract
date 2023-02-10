@@ -1,13 +1,25 @@
-# Sample Hardhat Project
+# NFT Staking Contract
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This is a contract that allows holders of an ERC721A token standard NFT collection to stake their NFTs.
 
-Try running some of the following tasks:
+## About the Contract
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+The staking contract is integrated with an ERC721A NFT minting contract. Holders of that NFT contract can interact with the staking contract to stake their NFTs. The contract holds the NFTs until they are unstaked by the original owner, or force unstaked by the contract owner.
+
+The contract is also very minimal, and provides a solid, gas-optimized foundation to add additional features such as staking rewards.
+
+## Testing, Coverage, and Gas Report
+The following images are the contract's testing & coverage results, as well as the gas report.
+
+![](./test-results.png)
+![](./coverage-results.png)
+![](./gas-report.png)
+
+## Technologies Used
+- Solidity
+- Hardhat
+- Hardhat Gas Reporter
+- Solidity Coverage
+- ERC721A & OpenZeppelin Contracts
+- TypeScript
+

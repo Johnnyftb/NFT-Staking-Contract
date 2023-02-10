@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+/// @title John's NFT Staking Contract
+/// @author John Pioc (www.johnpioc.com)
+/// @notice This contract can be used to stake ERC721A token standard NFTs
+
 import "erc721a/contracts/IERC721A.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 
 error NFTStaking__ContractNotApproved();
-error NFTStaking__TokenAlreadyStaked();
-error NFTStaking__TransferFailed();
 error NFTStaking__StakingNotOpen();
 
 contract NFTStaking is ERC721Holder, Ownable {
@@ -30,6 +32,8 @@ contract NFTStaking is ERC721Holder, Ownable {
         isStakingOpen = false;
     }
 
+    /// @notice Function to stake an array of token IDs. Token IDs that don't belong to the caller will not get staked
+    /// @param _tokenIds Array of token IDs
     function stakeMany(uint256[] calldata _tokenIds) public {
         if (!isStakingOpen) revert NFTStaking__StakingNotOpen();
         if (!nftAddress.isApprovedForAll(msg.sender, address(this))) revert NFTStaking__ContractNotApproved();
@@ -48,6 +52,8 @@ contract NFTStaking is ERC721Holder, Ownable {
         }
     }
 
+    /// @notice Function to unstake an array of token IDs. Token IDs that don't belong to the caller will not get unstaked
+    /// @param _tokenIds Array of token IDs
     function unstakeMany(uint256[] calldata _tokenIds) public {
         for (uint256 i = 0; i < _tokenIds.length; i++) {
             uint256 tokenId = _tokenIds[i];
@@ -60,6 +66,8 @@ contract NFTStaking is ERC721Holder, Ownable {
         }
     }
 
+    /// @notice Function to force unstake an array of token IDs. Only callable by owner. Token IDs not originally staked are not touched
+    /// @param _tokenIds Array of token IDs
     function forceUnstakeMany(uint256[] calldata _tokenIds) public onlyOwner {
         for (uint256 i = 0; i < _tokenIds.length; i++) {
             uint256 tokenId = _tokenIds[i];
@@ -72,10 +80,13 @@ contract NFTStaking is ERC721Holder, Ownable {
         }
     }
 
+    /// @notice Function to set the NFT address. Only callable by owner
+    /// @param _nftAddress Address of the NFT collection's contract
     function setNftAddress(address _nftAddress) public onlyOwner {
         nftAddress = IERC721A(_nftAddress);
     }
 
+    /// @notice Function to toggle the 'isStakingOpen' variable
     function toggleStakingOpen() public onlyOwner {
         isStakingOpen = !isStakingOpen;
     }
