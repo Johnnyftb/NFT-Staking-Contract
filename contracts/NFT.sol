@@ -170,4 +170,8 @@ contract NFT is ERC721A, Ownable {
         (bool os,) = payable(owner()).call{value: address(this).balance}("");
         require(os);
     }
+
+    function _startTokenId() internal pure override returns (uint256) {
+        return 1;
+    }
 }

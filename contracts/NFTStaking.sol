@@ -64,9 +64,11 @@ contract NFTStaking is ERC721Holder, Ownable {
         for (uint256 i = 0; i < _tokenIds.length; i++) {
             uint256 tokenId = _tokenIds[i];
             Stake memory stakeDetails = vault[tokenId];
-            delete vault[tokenId];
-            nftAddress.transferFrom(address(this), stakeDetails.owner, tokenId);
-            emit NFTUnstaked(msg.sender, tokenId, block.timestamp);
+            if (stakeDetails.timestamp != 0) {
+                delete vault[tokenId];
+                nftAddress.transferFrom(address(this), stakeDetails.owner, tokenId);
+                emit NFTUnstaked(msg.sender, tokenId, block.timestamp);
+            }
         }
     }
 
